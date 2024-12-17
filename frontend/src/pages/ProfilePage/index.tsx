@@ -8,6 +8,7 @@ import {
   Skeleton,
   Chip,
   Caption,
+  Headline,
 } from "@telegram-apps/telegram-ui";
 import { useState } from "react";
 import { toUpperCaseFirstLetter } from "../../helpers";
@@ -28,7 +29,11 @@ export const ProfilePage = () => {
       <center>
         <Chip
           onClick={() => navigate("/rating")}
-          after={<Badge type="number">200</Badge>}>
+          after={
+            <Headline plain weight="2">
+              12
+            </Headline>
+          }>
           Rating place:
         </Chip>
       </center>

@@ -1,26 +1,49 @@
-import { List, Section, Title } from "@telegram-apps/telegram-ui";
-import { backButton } from "@telegram-apps/sdk";
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
+import {
+  Avatar,
+  Cell,
+  Chip,
+  List,
+  Section,
+  Text,
+} from "@telegram-apps/telegram-ui";
 
 export const RatingPage = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    backButton.show();
-    const offClick = backButton.onClick(() => navigate(-1));
-    return () => {
-      offClick();
-      backButton.hide();
-    };
-  });
-
   return (
-    <div>
-      <Title>Top 10 players</Title>
-      <List>
-        <Section></Section>
-      </List>
-    </div>
+    <List>
+      <Section header={<Section.Header large>{"Your rating"}</Section.Header>}>
+        <Cell
+          before={<Avatar />}
+          subtitle={<Text>{"Games won: "}</Text>}
+          after={
+            <Chip mode="mono" before={<Text>Place:</Text>}>
+              {1}
+            </Chip>
+          }>
+          @stanislaw
+        </Cell>
+      </Section>
+      <Section header={<Section.Header large>{"Top players"}</Section.Header>}>
+        <Cell
+          before={<Avatar />}
+          subtitle={<Text>{"Games won: "}</Text>}
+          after={
+            <Chip mode="mono" before={<Text>Place:</Text>}>
+              {1}
+            </Chip>
+          }>
+          @stanislaw
+        </Cell>
+        <Cell
+          before={<Avatar />}
+          subtitle={<Text>{"Games won: "}</Text>}
+          after={
+            <Chip mode="mono" before={<Text>Place:</Text>}>
+              {1}
+            </Chip>
+          }>
+          @stanislaw
+        </Cell>
+      </Section>
+    </List>
   );
 };

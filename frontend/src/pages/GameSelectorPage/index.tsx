@@ -1,9 +1,21 @@
 import { Card, Skeleton, Title } from "@telegram-apps/telegram-ui";
-import React from "react";
+import React, { useEffect } from "react";
 
 import DiceImage from "../../assets/images/games/dice.png";
+import { useNavigate } from "react-router";
+import { initData } from "@telegram-apps/sdk";
 
 export const GameSelectorPage = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    initData.restore();
+    const roomId = initData.startParam();
+    if (roomId && !window.sessionStorage.isRedirected) {
+      console.log(roomId);
+      navigate(`/game/${roomId}`);
+      window.sessionStorage.isRedirected = true;
+    }
+  }, []);
   return (
     <div style={{ padding: "0 24px" }}>
       <Title style={{ textAlign: "center" }}>Games</Title>
@@ -16,7 +28,9 @@ export const GameSelectorPage = () => {
         <Skeleton visible={false}>
           <Card style={{ width: "100%" }}>
             <React.Fragment>
-              <Card.Chip readOnly>Play</Card.Chip>
+              <Card.Chip onClick={() => navigate("gamesearch")} readOnly>
+                Play
+              </Card.Chip>
               <div
                 style={{
                   display: "flex",
