@@ -13,18 +13,22 @@ import {
 import { useState } from "react";
 import { toUpperCaseFirstLetter } from "../../helpers";
 import { useNavigate } from "react-router";
+import { useUserStore } from "../../stores/useUserStore";
 
 const TAB_LIST_ITEMS = ["inventory", "games history"];
 
 export const ProfilePage = () => {
   const [selectedTab, setSelectedTab] = useState("inventory");
   const navigate = useNavigate();
-
+  const { user, loading, error, getUser } = useUserStore((state) => state);
+  console.log(user);
   return (
     <div style={{ padding: "0 12px" }}>
       <center style={{ margin: 12 }}>
-        <Avatar size={96} />
-        <Title style={{ marginTop: 12 }}>@stanislavv</Title>
+        <Avatar size={96} src={user?.photoUrl} />
+        <Title style={{ marginTop: 12 }}>
+          {user?.username || user?.firstName}
+        </Title>
       </center>
       <center>
         <Chip

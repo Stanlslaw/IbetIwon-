@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GameSelectorPage } from "./pages/GameSelectorPage";
-import { BrowserRouter, redirect, Route, Routes } from "react-router";
+import { BrowserRouter, Route, Routes } from "react-router";
 import { EarnPage } from "./pages/EarnPage";
 import { TabBarLayout } from "./components/Layouts/TabBarLayout";
 import { ProfilePage } from "./pages/ProfilePage";
@@ -13,12 +13,15 @@ import {
   viewport,
   swipeBehavior,
   closingBehavior,
+  initData,
 } from "@telegram-apps/sdk";
 import { RatingPage } from "./pages/RatingPage";
 import { BasicLayout } from "./components/Layouts/BasicLayot";
 import { GameSearch } from "./pages/GameSearch";
 import { RoomSetupPage } from "./pages/RoomSetupPage";
 import { GamePage } from "./pages/GamePage";
+import userService from "./services/user.service";
+import { Spinner } from "@telegram-apps/telegram-ui";
 
 function App() {
   const [isAppReady, setIsAppReady] = useState<boolean>(false);
@@ -28,7 +31,6 @@ function App() {
   }, []);
 
   const initialize = async () => {
-    setIsAppReady(true);
     const isTGApp = await isTMA();
     if (isTGApp) {
       init();
@@ -46,11 +48,34 @@ function App() {
       viewport.expand();
       swipeBehavior.disableVertical();
       closingBehavior.enableConfirmation();
+      initData.restore();
+      const user = initData.user();
+      console.log(user);
+      const isUserRegistered = await userService.getUser(user?.id);
+      if (isUserRegistered) {
+        await userService.updateUser(user);
+      } else {
+        await userService.saveUser(user);
+      }
+
+      setIsAppReady(true);
     }
   };
 
   if (!isAppReady) {
-    return null;
+    return (
+      <div
+        style={{
+          display: "flex",
+          flex: 1,
+          minHeight: "100vh",
+          background: "var(--tgui--secondary_bg_color)",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+        <Spinner size="l" />
+      </div>
+    );
   }
 
   return (

@@ -6,6 +6,7 @@ import { MdGames } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
 import { FaShoppingBag } from "react-icons/fa";
 import { IconType } from "react-icons/lib";
+import { useUserStore } from "../../stores/useUserStore";
 
 type TabBarItemType = {
   id: number;
@@ -40,11 +41,12 @@ const TAB_BARS: TabBarItemType[] = [
     Icon: FaShoppingBag,
   },
 ];
+
 export const TabBarLayout = () => {
   const [selectedTab, setSelectedTab] = useState<TabBarItemType | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
-
+  const { getUser, user, loading } = useUserStore((state) => state);
   useEffect(() => {
     const item = TAB_BARS.find(({ path }) => location.pathname === path);
     if (item) {
@@ -53,6 +55,10 @@ export const TabBarLayout = () => {
       setSelectedTab(null);
     }
   }, [location]);
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <div
@@ -64,10 +70,10 @@ export const TabBarLayout = () => {
       <div className={"flex__center"}>
         <Chip
           style={{ margin: "8px 0" }}
-          before={<Text>Coins:</Text>}
+          before={<Text>Coins: </Text>}
           mode="elevated"
           onClick={() => navigate("earn")}>
-          399
+          {user ? user.coinBalance : loading ? "..." : "Err"}
         </Chip>
       </div>
       <Outlet />
